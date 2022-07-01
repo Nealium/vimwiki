@@ -33,9 +33,9 @@ endfunction
 
 function! vimwiki#diary#diary_date_link(...) abort
   if a:0
-    return strftime('%Y-%m-%d', a:1)
+    return vimwiki#vars#get_wikilocal('diary_prefix').strftime('%Y-%m-%d', a:1)
   else
-    return strftime('%Y-%m-%d')
+    return vimwiki#vars#get_wikilocal('diary_prefix').strftime('%Y-%m-%d')
   endif
 endfunction
 
@@ -158,7 +158,7 @@ endfunction
 
 
 function! vimwiki#diary#get_diary_files() abort
-  let rx = '^\d\{4}-\d\d-\d\d'
+  let rx = '^'.vimwiki#vars#get_wikilocal('diary_prefix').'\d\{4}-\d\d-\d\d'
   let s_files = glob(vimwiki#vars#get_wikilocal('path').
         \ vimwiki#vars#get_wikilocal('diary_rel_path').'*'.vimwiki#vars#get_wikilocal('ext'))
   let files = split(s_files, '\n')
@@ -176,8 +176,8 @@ function! s:group_links(links) abort
   let p_year = 0
   let p_month = 0
   for fl in sort(keys(a:links))
-    let year = strpart(fl, 0, 4)
-    let month = strpart(fl, 5, 2)
+    let year = strpart(fl, strlen(vimwiki#vars#get_wikilocal('diary_prefix')), 4)
+    let month = strpart(fl, strlen(vimwiki#vars#get_wikilocal('diary_prefix'))+5, 2)
     if p_year != year
       let result[year] = {}
       let p_month = 0
@@ -345,7 +345,8 @@ function! vimwiki#diary#generate_diary_section() abort
             let link_tpl = vimwiki#vars#get_syntaxlocal('Weblink1Template')
 
             if empty(topcap) " When using markdown syntax, we should ensure we always have a link description.
-              let topcap = fl
+              " let topcap = fl
+              let topcap = strpart(fl, strlen(vimwiki#vars#get_wikilocal('diary_prefix')), 10)
             endif
           endif
 
