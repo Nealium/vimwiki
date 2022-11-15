@@ -484,7 +484,13 @@ if str2nr(vimwiki#vars#get_global('key_mappings').lists)
   if maparg('<CR>', 'i') !~# '.*VimwikiReturn*.'
     if has('patch-7.3.489')
       " expand iabbrev on enter
-      inoremap <silent><buffer> <CR> <C-]><Esc>:VimwikiReturn 1 5<CR>
+
+      if exists("g:UltiSnipsExpandTrigger") && g:UltiSnipsExpandTrigger == "<CR>"
+        inoremap <expr> <silent><buffer> <CR> pumvisible() ? "\<C-R>=UltiSnips#ExpandSnippet()<cr>" : "<C-]><Esc>:VimwikiReturn 1 5<CR>"
+      else
+        inoremap <silent><buffer> <CR> <C-]><Esc>:VimwikiReturn 1 5<CR>
+      endif
+
     else
       inoremap <silent><buffer> <CR> <Esc>:VimwikiReturn 1 5<CR>
     endif
@@ -540,7 +546,14 @@ endfunction
 
 " insert mode table mappings
 if str2nr(vimwiki#vars#get_global('key_mappings').table_mappings)
-  inoremap <expr><buffer> <Tab> vimwiki#tbl#kbd_tab()
+
+  if exists("g:UltiSnipsExpandTrigger") && g:UltiSnipsExpandTrigger == "<Tab>"
+    inoremap <expr> <silent><buffer> <Tab> pumvisible() ? "\<C-R>=UltiSnips#ExpandSnippet()<cr>" : vimwiki#tbl#kbd_tab()
+  else
+    inoremap <expr><buffer> <Tab> vimwiki#tbl#kbd_tab()
+  endif
+
+  " inoremap <expr><buffer> <Tab> vimwiki#tbl#kbd_tab()
   inoremap <expr><buffer> <S-Tab> vimwiki#tbl#kbd_shift_tab()
 endif
 
