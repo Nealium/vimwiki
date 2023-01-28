@@ -680,7 +680,7 @@ endfunction
 
 function! vimwiki#tbl#format(lnum, ...) abort
   " Clause in
-  if !vimwiki#u#ft_is_vw()
+  if !vimwiki#u#ft_is_vw() && (!exists('g:vimwiki_restrict_table_align') || g:vimwiki_restrict_table_align == 1)
     return
   endif
   let line = getline(a:lnum)
