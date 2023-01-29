@@ -97,8 +97,7 @@ function! vimwiki#diary#diary_date_link(...) abort
     let l:computed_timestamp = localtime() + l:delta_periods*l:day_s
   endif
 
-  return vimwiki#vars#get_wikilocal('diary_prefix') . strftime('%y-%m-%d', l:computed_timestamp)
-
+  return vimwiki#vars#get_wikilocal('diary_prefix') . strftime('%Y-%m-%d', l:computed_timestamp)
 endfunction
 
 
